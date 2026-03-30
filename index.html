@@ -1,290 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>R&A Carpentry</title>
 
-<title>R&A Carpentry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-top: #4a5159;
+      --bg-mid: #31373f;
+      --bg-deep: #20252b;
+      --bg-dark: #171b20;
 
-<style>
+      --nav-bg: rgba(20, 23, 27, 0.72);
+      --line: rgba(255,255,255,0.08);
+      --panel: rgba(255,255,255,0.035);
+      --panel-hover: rgba(255,255,255,0.07);
 
-/* COLORS */
-:root {
-  --bg1: #3a3f46;
-  --bg2: #2a2e33;
-  --bg3: #1c1f23;
+      --text-main: #e7ebef;
+      --text-soft: #bcc4cc;
+      --text-muted: #98a2ac;
+      --text-subtle: #838d96;
+    }
 
-  --text-main: #e6e2da;
-  --text-soft: #b8b3aa;
-  --text-muted: #8c8881;
+    * {
+      box-sizing: border-box;
+    }
 
-  --line: rgba(255,255,255,0.06);
-  --panel: rgba(255,255,255,0.025);
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-* { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(1200px 640px at 50% -6%, rgba(122, 135, 148, 0.34) 0%, transparent 58%),
+        radial-gradient(900px 520px at 85% 8%, rgba(96, 108, 120, 0.22) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 30%, var(--bg-deep) 72%, var(--bg-dark) 100%);
+      background-attachment: fixed;
+    }
 
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  color: var(--text-main);
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0) 22%),
+        radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 60%);
+      opacity: 0.7;
+    }
 
-  background:
-    radial-gradient(circle at 50% -10%, #50565f 0%, transparent 60%),
-    linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
-}
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+      opacity: 0.055;
+      mix-blend-mode: soft-light;
+    }
 
-/* subtle texture */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
-  opacity: 0.07;
-  pointer-events: none;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* NAV */
-.nav {
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(10px);
-  background: rgba(20,22,25,0.6);
-  border-bottom: 1px solid var(--line);
-}
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
 
-.nav-inner {
-  max-width: 1100px;
-  margin: auto;
-  padding: 18px;
-  display: flex;
-  justify-content: space-between;
-}
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
 
-.brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-}
+    .nav-inner {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
-.nav-links {
-  display: flex;
-  gap: 20px;
-  color: var(--text-soft);
-}
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      letter-spacing: 0.4px;
+      color: var(--text-main);
+    }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 100px 20px;
-}
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
 
-.logo {
-  width: 500px;
-  max-width: 90%;
-  margin-bottom: 40px;
-  filter: brightness(0) invert(92%);
-}
+    .nav-links a {
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
 
-.carpentry {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 50px;
-  letter-spacing: 0.28em;
-  margin-bottom: 15px;
-}
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
 
-.subline {
-  font-size: 14px;
-  letter-spacing: 0.22em;
-  color: var(--text-soft);
-}
+    .hero {
+      min-height: calc(100vh - 78px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 44px 0 72px;
+    }
 
-.custom {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  letter-spacing: 0.34em;
-  margin-top: 10px;
-  margin-bottom: 40px;
-}
+    .hero-inner {
+      max-width: 1040px;
+      width: 100%;
+    }
 
-.text {
-  max-width: 650px;
-  margin: auto;
-  color: var(--text-muted);
-  line-height: 1.8;
-}
+    .logo {
+      width: min(650px, 92vw);
+      height: auto;
+      display: block;
+      margin: 0 auto 22px;
+      filter: brightness(0) saturate(0%) invert(94%) sepia(7%) saturate(220%) hue-rotate(176deg) brightness(103%) contrast(96%);
+      opacity: 0.98;
+    }
 
-.btn {
-  display: inline-block;
-  margin-top: 30px;
-  padding: 12px 20px;
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  font-size: 13px;
-  letter-spacing: 0.15em;
-}
+    .carpentry {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(50px, 6vw, 72px);
+      letter-spacing: 0.26em;
+      line-height: 1;
+      margin: -2px 0 22px;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
 
-/* SECTION */
-.section {
-  max-width: 1000px;
-  margin: auto;
-  padding: 100px 20px;
-  border-top: 1px solid var(--line);
-}
+    .subline {
+      margin: 0 0 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(19px, 2.1vw, 28px);
+      letter-spacing: 0.16em;
+      line-height: 1.15;
+      color: var(--text-soft);
+      text-transform: uppercase;
+    }
 
-.title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 40px;
-  margin-bottom: 20px;
-}
+    .custom {
+      margin: 0 0 40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.1vw, 30px);
+      letter-spacing: 0.28em;
+      line-height: 1;
+      color: var(--text-soft);
+      text-transform: uppercase;
+    }
 
-.section-text {
-  color: var(--text-soft);
-  line-height: 1.8;
-}
+    .hero-copy {
+      max-width: 770px;
+      margin: 0 auto;
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--text-muted);
+    }
 
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 20px;
-  margin-top: 40px;
-}
+    .hero-actions {
+      margin-top: 34px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
 
-.card {
-  border: 1px solid var(--line);
-  padding: 20px;
-  border-radius: 12px;
-  background: var(--panel);
-}
+    .btn {
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.035);
+      color: var(--text-main);
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
 
-.photo {
-  height: 250px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-}
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.18);
+    }
 
-/* CONTACT */
-.contact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-top: 40px;
-}
+    .btn.primary {
+      background: rgba(255,255,255,0.1);
+    }
 
-.label {
-  font-size: 12px;
-  color: var(--text-muted);
-}
+    .section {
+      padding: 96px 0;
+      border-top: 1px solid var(--line);
+    }
 
-.value {
-  font-size: 16px;
-}
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 54px);
+      margin: 0 0 16px;
+      color: var(--text-main);
+    }
 
-/* MOBILE */
-@media(max-width:900px){
-  .grid,.contact{grid-template-columns:1fr;}
-  .carpentry{font-size:38px;}
-}
+    .section-text {
+      color: var(--text-soft);
+      line-height: 1.86;
+      max-width: 820px;
+      margin: 0 0 34px;
+      font-size: 15px;
+    }
 
-</style>
+    .services-grid,
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card,
+    .photo-placeholder,
+    .contact-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 20px;
+    }
+
+    .card {
+      padding: 28px;
+      min-height: 205px;
+      transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: var(--panel-hover);
+      border-color: rgba(255,255,255,0.16);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 31px;
+      color: var(--text-main);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .photo-placeholder {
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-subtle);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .photo-placeholder:hover {
+      background: rgba(255,255,255,0.045);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+    }
+
+    .contact-card {
+      padding: 28px;
+    }
+
+    .contact-row {
+      margin-bottom: 18px;
+    }
+
+    .label {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .footer {
+      padding: 28px 0 52px;
+      color: var(--text-subtle);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .services-grid,
+      .portfolio-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        height: auto;
+        padding: 18px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 36px;
+      }
+
+      .logo {
+        margin-bottom: 18px;
+      }
+
+      .carpentry {
+        letter-spacing: 0.18em;
+        margin-bottom: 18px;
+      }
+
+      .subline {
+        letter-spacing: 0.1em;
+      }
+
+      .custom {
+        letter-spacing: 0.18em;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- NAV -->
-<div class="nav">
-  <div class="nav-inner">
-    <div class="brand">R&A Carpentry</div>
-    <div class="nav-links">
-      <div>Services</div>
-      <div>Portfolio</div>
-      <div>Contact</div>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">R&A Carpentry</div>
+      <nav class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#how-we-work">How We Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
-  </div>
-</div>
+  </header>
 
-<!-- HERO -->
-<div class="hero">
+  <section class="hero">
+    <div class="container hero-inner">
+      <img src="RNA_manual_fontlike.svg" alt="R&A Logo" class="logo">
 
-  <img src="RNA_manual_fontlike.svg" class="logo">
+      <div class="carpentry">CARPENTRY</div>
+      <p class="subline">FINISH CARPENTRY &amp; BUILT-INS</p>
+      <p class="custom">CUSTOM</p>
 
-  <div class="carpentry">CARPENTRY</div>
+      <p class="hero-copy">
+        High-end finish carpentry, built-ins, trim work, and detailed interior solutions executed with precision.
+      </p>
 
-  <div class="subline">FINISH CARPENTRY & BUILT-INS</div>
-  <div class="custom">CUSTOM</div>
-
-  <div class="text">
-    Clean, high-end finish carpentry, built-ins, trim work, and detailed interior solutions executed with precision.
-  </div>
-
-</div>
-
-<!-- PROCESS -->
-<div class="section">
-  <div class="title">How We Work</div>
-
-  <div class="section-text">
-    We can start with your inspiration — photos, ideas, or examples you found online —
-    and turn it into a clean, buildable design that fits your space.<br><br>
-
-    A free on-site consultation allows us to walk through the project, discuss layout options,
-    and develop a clear plan before moving forward.<br><br>
-
-    If needed, we bring live samples and molding profiles so you can see and feel the materials
-    before making a final decision.<br><br>
-
-    Everything is thought through in advance — visually and technically —
-    to ensure a clean and precise final result.
-  </div>
-</div>
-
-<!-- SERVICES -->
-<div class="section">
-  <div class="title">Services</div>
-
-  <div class="grid">
-    <div class="card">Finish Carpentry</div>
-    <div class="card">Built-Ins</div>
-    <div class="card">Custom Work</div>
-  </div>
-</div>
-
-<!-- PORTFOLIO -->
-<div class="section">
-  <div class="title">Portfolio</div>
-
-  <div class="grid">
-    <div class="photo"></div>
-    <div class="photo"></div>
-    <div class="photo"></div>
-  </div>
-</div>
-
-<!-- CONTACT -->
-<div class="section">
-  <div class="title">Contact</div>
-
-  <div class="contact">
-
-    <div>
-      <div class="label">Phone</div>
-      <div class="value">513-765-9291</div>
-
-      <div class="label" style="margin-top:15px;">Email</div>
-      <div class="value">alex@randacarpentry.yahoo.com</div>
-    </div>
-
-    <div>
-      <div class="label">Area Served</div>
-      <div class="value">
-        Cincinnati, Mason, Indian Hill, Montgomery, Mariemont, Blue Ash, Madeira, Hyde Park, Oakley
+      <div class="hero-actions">
+        <a class="btn primary" href="#contact">Request Estimate</a>
+        <a class="btn" href="tel:5137659291">Call 513-765-9291</a>
       </div>
     </div>
+  </section>
 
-  </div>
-</div>
+  <section class="section" id="how-we-work">
+    <div class="container">
+      <h2 class="section-title">How We Work</h2>
+      <p class="section-text">
+        We can start with your inspiration — photos, ideas, or examples you found online —
+        and turn it into a clean, buildable design that fits your space.
+      </p>
+      <p class="section-text">
+        A free on-site consultation allows us to walk through the project, discuss layout options,
+        and develop a clear plan before moving forward.
+      </p>
+      <p class="section-text">
+        If needed, we bring live samples and molding profiles so you can see and feel the materials
+        before making a final decision.
+      </p>
+      <p class="section-text">
+        Everything is thought through in advance — visually and technically —
+        to ensure a clean and precise final result.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="container">
+      <h2 class="section-title">Services</h2>
+      <p class="section-text">
+        Focused on detailed interior finish work with clean execution, balanced proportions,
+        and a final result that feels intentional and high-end.
+      </p>
+
+      <div class="services-grid">
+        <div class="card">
+          <h3>Finish Carpentry</h3>
+          <p>
+            Precision trim installation, refined details, clean transitions,
+            and a finished look that elevates the overall space.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Built-Ins</h3>
+          <p>
+            Custom built-ins designed to fit the room properly,
+            look integrated, and bring both function and character.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Custom Work</h3>
+          <p>
+            Closets, mudrooms, ceiling details, decorative wall work,
+            beams, and one-off carpentry tailored to the home.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="portfolio">
+    <div class="container">
+      <h2 class="section-title">Portfolio</h2>
+      <p class="section-text">
+        Photo placeholders are set for now. Once your images are selected,
+        these blocks will be replaced with the real project gallery.
+      </p>
+
+      <div class="portfolio-grid">
+        <div class="photo-placeholder">Project Photo</div>
+        <div class="photo-placeholder">Project Photo</div>
+        <div class="photo-placeholder">Project Photo</div>
+        <div class="photo-placeholder">Project Photo</div>
+        <div class="photo-placeholder">Project Photo</div>
+        <div class="photo-placeholder">Project Photo</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-row">
+            <div class="label">Phone</div>
+            <div class="value"><a href="tel:5137659291">513-765-9291</a></div>
+          </div>
+
+          <div class="contact-row">
+            <div class="label">Email</div>
+            <div class="value"><a href="mailto:alex@randacarpentry.com">alex@randacarpentry.com</a></div>
+          </div>
+
+          <div class="contact-row">
+            <div class="label">Website</div>
+            <div class="value">randacarpentry.com</div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-row">
+            <div class="label">Area Served</div>
+            <div class="value">
+              Cincinnati and surrounding areas, including Mason, Indian Hill, Montgomery,
+              Mariemont, Blue Ash, Madeira, Hyde Park, and Oakley.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © R&A Carpentry
+  </footer>
 
 </body>
 </html>
